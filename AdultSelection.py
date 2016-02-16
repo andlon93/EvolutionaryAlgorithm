@@ -20,45 +20,88 @@ def Adult_Selection(A1, A2, A3, children, parents, number_of_parents):
 		return Generational_Mixing(children, parents, number_of_parents)
 #
 #
-### Function that: replace all adults with new children
+'''### Function that: replace all adults with new children
 #   Input:         list of children and parents
 #   Output:        list of new parents
 #def Full_Replacement(children):
 #	return children
 #
-#
+#'''
 ### Function that: replace all adults with new children.
 ###                But not all children can become adults
 #   Input:         list of children and parents
 #   Output:        list of new parents
 def Over_Production(children, number_of_parents):
+	# A list of the new parents for this generation
 	new_parents = []
+
+	#Iterate through all new parents.
 	for new_parent in range(number_of_parents):
 		strongest = None
 		index = None
+
+		# Pick the strongest child
 		for i in range(len(children)):
 			if (strongest == None or strongest.fitness < children[i].fitness):
 				strongest = children[i]
 				index = i
+
+		# Add strongest child to new parents
 		new_parents.append(strongest)
+
+		#Remove strongest child from children so it wont be chosen again.
 		children.pop(index)
+
+	# Return the list containing the new parents
 	return new_parents
 #
 #
 ### Function that: mix parents and children.
 #   Input:         list of children and parents
 #   Output:        list of new parents
-def Generational_Mixing(children, parents):
-	pass
+def Generational_Mixing(children, parents, number_of_parents):
+	# A list of the new parents for this generation
+	new_parents = []
+
+	#Iterate through all new parents.
+	for new_parent in range(number_of_parents):
+		strongest = None
+		index = None
+		isChild = False
+
+		#Find the strongest of all children and parents
+		for i in range(len(children)):
+			if (strongest == None or strongest.fitness < children[i].fitness):
+				strongest = children[i]
+				index = i
+				isChild = True
+		for i in range(len(parents)):
+			if (strongest == None or strongest.fitness < parents[i].fitness):
+				strongest = parents[i]
+				index = i
+				isChild = False
+		# Add strongest individual to new parents
+		new_parents.append(strongest)
+		
+		#Remove indidual from its list
+		if isChild == True: children.pop(index)
+		else: parents.pop(index)
+
+	# Return the new parents
+	return new_parents
 
 if __name__ == '__main__':
 	children = []
+	parents = []
 	n=50
 	for n in range(n):
 		children.append(OM.individual(20, 0.05))
+		parents.append(OM.individual(20, 0.05))
 		print(children[-1].fitness)
 	print("\n",len(children),"\n")
-	new_parents = Over_Production(children, 20)
+	print("\n",len(parents),"\n")
+	#new_parents = Over_Production(children, 20)
+	new_parents = Generational_Mixing(children, parents, 20)
 	print("\n",len(new_parents),"\n")
 	for parent in new_parents:
 		print(parent.fitness)
