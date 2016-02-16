@@ -20,7 +20,7 @@ def normalise(generation):
 		#Update individuals fitness
 		individ.fitness = individ.fitness/summ
 #
-### Function that: Select parents
+### Function that: Select parents globally
 #	Input:         list of the individs that may become parents, number of parents to make
 #   Outout:        Parents
 def Global_Selection(generation, number_of_parents):
@@ -58,11 +58,15 @@ def Global_Selection(generation, number_of_parents):
 	#return the list of new parents
 	return parents
 #
+### Function that: Select parents locally
+#	Input:         list of the individs that may become parents, number of parents to make
+#   Outout:        Parents
+def Local_Selection(generation, number_of_parents):
+	pass
+#
 if __name__ == '__main__':
-	for n in range(20):
-		l=[]
-		for n in range(50):
-			l.append(OM.individual(50, 0.05))
-		#print(len(l))
-		b= Global_Selection(l, 20)
-		print(len(l), len(b))
+	l=[]
+	for n in range(50):
+		l.append(OM.individual(50, 0.05))
+	b= Global_Selection(l, 20)
+	print(len(l), len(b))
