@@ -1,4 +1,5 @@
 import random as rng
+import copy
 import OneMax as OM
 ### Function that: normalise the fitness of a generation.
 ###				   The sum of all fitnesses will be 1
@@ -23,10 +24,25 @@ def normalise(generation):
 ### Function that: Select parents globally
 #	Input:         list of the individs that may become parents, number of parents to make
 #   Outout:        Parents
-def Global_Selection(generation, number_of_parents):
+def Global_Selection(temp, number_of_parents):
+	generation = copy.deepcopy(temp) # MÅ FIKSES!!
 	# List of parents
 	parents = []
-
+	#
+	'''elitism = 4
+	for n in range(elitism):
+		best_fitness = 0
+		best_individual = None
+		index = 0
+		for i in range(len(generation)):
+			if generation[i].fitness > best_fitness:
+				best_fitness = generation[i].fitness
+				best_individual = generation[i]
+				index = i
+		parents.append(best_individual)
+		#print(index)
+		generation.pop(index)'''
+	#
 	for q in range(number_of_parents):
 		#print ("Iterasjon: ",q)
 
@@ -61,7 +77,14 @@ def Global_Selection(generation, number_of_parents):
 ### Function that: Select parents locally
 #	Input:         list of the individs that may become parents, number of parents to make
 #   Outout:        Parents
-def Local_Selection(generation, number_of_parents):
+def Local_Selection(generation, number_of_parents, k, epsilon):
+	# List of lists with members of each tournament
+	tournaments = []
+
+	# One iteration for each tournament
+	#for i in range(number_of_parents):
+
+
 	pass
 #
 if __name__ == '__main__':

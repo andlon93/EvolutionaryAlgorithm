@@ -1,14 +1,27 @@
 import random as rng
 #
 class individual:
+	genotype_Length = 0
+	mutation_prob = 0
 	genotype = []
-	phenotype = []
-
+	fitness = 0
 	### Constructor
 	def __init__(self, n, mutation_prob):
-		self.genotype = self.make_Random_Genotype(n)
-		self.phenotype = self.make_Phenotype(self.genotype, mutation_prob)
-		self.fitness = self.Fitness()
+		self.mutation_prob = mutation_prob
+		self.genotype_Length = n
+		self.make_Random_Genotype(n)
+		self.update_fitness()
+
+	def __init__(self, n, mutation_prob, genotype=None):
+		self.mutation_prob = mutation_prob
+		self.genotype_Length = n
+		self.genotype = genotype
+		if (self.genotype == None):
+			self.make_Random_Genotype(n)
+		self.update_fitness()
+
+	def __repr__(self):
+		return str(self.fitness)
 
 	### Function that: initialise a random list of 0s and 1s of length n
 	#	Input:         int n: the length
@@ -17,43 +30,58 @@ class individual:
 		genotype = []
 		for i in range(n):
 			genotype.append(rng.randrange(0,2))
-		return genotype
+		self.genotype = genotype
 
-	### Function that: make phenotype based on the genotype
+	### Function that: make self.genotypetype based on the genotype
 	#	Input:         
-	#   Outout:        Phenotype
-	def make_Phenotype(self, geno, prob):
-		# The list of phenotype bits
-		pheno = []
+	#   Outout:        self.genotypetype
+	def try_to_mutate(self):
+
+		is_mutated = False
 
 		# Iterate through all bits in the genotype
-		for bit in geno:
+		for i in range(len(self.genotype)): 
 
-			# mutate with probability prob
-			if rng.random() < prob:
-				if bit == 1: 
-					pheno.append(0)
+			# try_to_mutate with probability prob
+			if rng.random() < self.mutation_prob:
+				if self.genotype[i] == 1: 
+					self.genotype[i] = 0
 				else: 
-					pheno.append(1)
-			else:
-				pheno.append(bit)
+					self.genotype[i] = 1
+				self.update_fitness()
+				is_mutated = True
+		return is_mutated
 
-		# Return the phenotype
-		return pheno
+		#print(self.genotype)
 
 	### Function that: Calculate the fitness of the indidual
-	#	Input:         phenotype
-	#   Outout:        Fitness value
-	def Fitness(self):
-		fitness = 0
-		for bit in self.phenotype:
-			if bit == 1:
-				fitness += 1
-		return fitness
+	#	Input:         self.genotypetype
+	#   Outout:        Fitness value in interval [0, 1]
+	def update_fitness(self):
+		self.fitness = sum(self.genotype)/self.genotype_Length
 #
 #
 if __name__ == '__main__':
-	individ = individual(20, 0.05)
+	individ = individual(20, 0.0005)
 	print(individ.genotype)
-	print(individ.phenotype)
-	print(individ.fitness)
+	print('Fitness: ', individ.fitness,"\n")
+	for i in range(10):
+		if (individ.try_to_mutate()):
+			print(individ.genotype)
+			print('Fitness: ', individ.fitness,"\n")
+	
+	'''n=20
+	l = []
+	summ=0
+	for n in range(n):
+		l.append(individual(20, 0.05))
+		summ += l[-1].fitness
+	print(summ)
+	for individ in l:
+		individ.fitness = individ.fitness/summ
+	summ2=0
+	for individ in l:
+		summ2 += individ.fitness
+	print(summ2)'''
+
+

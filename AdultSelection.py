@@ -1,4 +1,4 @@
-import OneMax as OM
+import copy
 
 ### Function that: is run from EA loop. 
 ###                Bool chooses which selection alg is to be used.
@@ -59,38 +59,13 @@ def Over_Production(children, number_of_parents):
 ### Function that: mix parents and children.
 #   Input:         list of children and parents
 #   Output:        list of new parents
-def Generational_Mixing(children, parents, number_of_parents):
-	# A list of the new parents for this generation
-	new_parents = []
-
-	#Iterate through all new parents.
-	for new_parent in range(number_of_parents):
-		strongest = None
-		index = None
-		isChild = False
-
-		#Find the strongest of all children and parents
-		for i in range(len(children)):
-			if (strongest == None or strongest.fitness < children[i].fitness):
-				strongest = children[i]
-				index = i
-				isChild = True
-		for i in range(len(parents)):
-			if (strongest == None or strongest.fitness < parents[i].fitness):
-				strongest = parents[i]
-				index = i
-				isChild = False
-		# Add strongest individual to new parents
-		new_parents.append(strongest)
-		
-		#Remove indidual from its list
-		if isChild == True: children.pop(index)
-		else: parents.pop(index)
-
-	# Return the new parents
-	return new_parents
+def Generational_Mixing(population, N):
+	# --- Selects the N individuals with the best fitness.
+	return sorted(population, key=lambda individual: individual.fitness)[len(population)-N:]
 
 if __name__ == '__main__':
+	# TESTING THE METHODS ABOVE
+	import OneMax as OM
 	children = []
 	parents = []
 	n=50
