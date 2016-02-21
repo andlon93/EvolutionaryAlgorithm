@@ -69,19 +69,3 @@ if __name__ == '__main__':
 		if (individ.try_to_mutate()):
 			print(individ.genotype)
 			print('Fitness: ', individ.fitness,"\n")
-	
-	'''n=20
-	l = []
-	summ=0
-	for n in range(n):
-		l.append(individual(20, 0.05))
-		summ += l[-1].fitness
-	print(summ)
-	for individ in l:
-		individ.fitness = individ.fitness/summ
-	summ2=0
-	for individ in l:
-		summ2 += individ.fitness
-	print(summ2)'''
-
-
