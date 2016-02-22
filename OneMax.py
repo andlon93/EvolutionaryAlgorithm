@@ -1,6 +1,7 @@
 import random as rng
 #
 class individual:
+	goal_string = []
 	genotype_Length = 0
 	mutation_prob = 0
 	genotype = []
@@ -12,7 +13,10 @@ class individual:
 		self.make_Random_Genotype(n)
 		self.update_fitness()
 
-	def __init__(self, n, mutation_prob, genotype=None):
+	def __init__(self, n, mutation_prob, goal_string=None, genotype=None):
+		self.goal_string = goal_string
+		if self.goal_string==None:
+			self.goal_string=[1]*n
 		self.mutation_prob = mutation_prob
 		self.genotype_Length = n
 		self.genotype = genotype
@@ -58,7 +62,12 @@ class individual:
 	#	Input:         self.genotypetype
 	#   Outout:        Fitness value in interval [0, 1]
 	def update_fitness(self):
-		self.fitness = sum(self.genotype)/self.genotype_Length
+		#self.fitness = sum(self.genotype)/self.genotype_Length
+		fit = 0
+		for i in range(len(self.genotype)):
+			if self.genotype[i] == self.goal_string[i]:
+				fit += 1
+		self.fitness = fit/self.genotype_Length
 #
 #
 if __name__ == '__main__':

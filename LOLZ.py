@@ -47,7 +47,6 @@ class individual:
 	#	Input:         self.genotypetype
 	#   Outout:        Fitness value in interval [0, 1]
 	def update_fitness(self):
-		#self.onesFitness()
 		if self.genotype[0] == 1: self.onesFitness()
 		else: self.zerosFitness()
 	#

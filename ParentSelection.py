@@ -1,7 +1,7 @@
 import random as rng
 import numpy as np
 import copy
-import OneMax as OM
+#import OneMax as OM
 ### Function that: normalise the fitness of a generation.
 ###				   The sum of all fitnesses will be 1
 #	Input:         list of all individuals in the generation
@@ -135,13 +135,19 @@ def Global_Selection(individuals, number_of_parents):
 			#print(minProb, ' <= ', number, ' < ', (minProb+fit))
 			if minProb <= number and number < minProb + fit:
 				#print(minProb*100, ' <= ', number*100, ' < ', (minProb+fit)*100)
+				#individuals[i].s = 3
 				new_parent = individuals[i]
 				#new_parent.update_fitness()
 				parents.append(new_parent)
+				#print(len(parents))
 				avg += (i+1)
 				if len(parents) == number_of_parents:
 					#for ind in individuals:
 					#	ind.update_fitness()
+					#print("I parent selection")
+					#print(parents[0].genotype)
+					#print (parents[0].s)
+					#print("Ute av parent selection")
 					return parents#, avg/number_of_parents
 				break
 			minProb += fit
