@@ -38,7 +38,7 @@ def fitness_proportionate_scaling(individuals):
 
 	# --- Scale fitness values by dividing by averge fitness.
 	for individual in individuals:
-		individual.fitness = individual.fitness/avg_fitness
+		individual.normalised_fitness = individual.fitness/avg_fitness
 #
 # --- Function: Sigma scaling.
 #     Input:  list of individuals
@@ -58,16 +58,16 @@ def sigma_scaling(individuals):
 	# --- Scale fitness values by sigma scaling conversion.
 	for individual in individuals:
 		if std_fitness < 1.0e-6:
-			individual.fitness = 1.0
+			individual.normalised_fitness = 1.0
 		else:
-			individual.fitness = 1.0 + (individual.fitness - avg_fitness) / (2*std_fitness)
+			individual.normalised_fitness = 1.0 + (individual.fitness - avg_fitness) / (2*std_fitness)
 #
 #
 # --- Function: Boltzmann scaling.
 #     Input:  list of individuals
 #     Output: none, but the fitness of the individuals are scaled.
-def boltzmann_scaling(individuals, T):
-
+def boltzmann_scaling(individuals):
+	T=10
 	# --- Calculate average of exp(f(i)/T) for the hole generation.
 	avg_exp = 0
 	for individual in individuals:
@@ -76,7 +76,7 @@ def boltzmann_scaling(individuals, T):
 
 	# --- Scale fitness values by boltzmann scaling conversion.
 	for individual in individuals:
-		individual.fitness =  np.exp(individual.fitness/T) / avg_exp
+		individual.normalised_fitness =  np.exp(individual.fitness/T) / avg_exp
 #
 #
 # --- Function: Rank .
@@ -96,31 +96,30 @@ def rank_scaling(individuals):
 
 	# --- Scale fitness values by rank scaling conversion.
 	for rank in range(1, len(individuals)+1):
-		individuals[rank-1].fitness = min_fitness + (max_fitness - min_fitness) * (rank - 1) / (len(individuals)-1)
+		individuals[rank-1].normalised_fitness = min_fitness + (max_fitness - min_fitness) * (rank - 1) / (len(individuals)-1)
 #
 #
 ### Function that: Select parents globally
 #	Input:         list of the individs that may become parents, number of parents to make
 #   Outout:        Parents
-def Global_Selection(individuals, number_of_parents):
+def Global_Selection(scaling, individuals, number_of_parents, epseps, NNN):
 	
 	# --- Initialize list of parents.
 	parents = []
 	avg=0.0
-
+	#individuals = copy.deepcopy(i)
 	# --- Scale the individuals fitness.
-	#fitness_proportionate_scaling(individuals)
+	scaling(individuals)
 
 	# --- Normalise the individuals fitness to be in the interval [0, 1]
 	normalise_fitness(individuals)
 
 	# --- Sort the array of indivduals with respect to fitness.
-	individuals = sorted(individuals, key=lambda individual: individual.fitness)
-	#print('i: ', individuals)
+	#individuals = sorted(individuals, key=lambda individual: individual.fitness)
 
 	# --- Pick N parents.
-	#while len(parents) < number_of_parents:
-	for qwerty in range(number_of_parents):
+	while len(parents) < number_of_parents:
+		#for qwerty in range(number_of_parents):
 		# ---- Get a random number between 0.0 and 1.0
 		number = rng.random()
 
@@ -135,19 +134,10 @@ def Global_Selection(individuals, number_of_parents):
 			#print(minProb, ' <= ', number, ' < ', (minProb+fit))
 			if minProb <= number and number < minProb + fit:
 				#print(minProb*100, ' <= ', number*100, ' < ', (minProb+fit)*100)
-				#individuals[i].s = 3
 				new_parent = individuals[i]
-				#new_parent.update_fitness()
 				parents.append(new_parent)
-				#print(len(parents))
 				avg += (i+1)
 				if len(parents) == number_of_parents:
-					#for ind in individuals:
-					#	ind.update_fitness()
-					#print("I parent selection")
-					#print(parents[0].genotype)
-					#print (parents[0].s)
-					#print("Ute av parent selection")
 					return parents#, avg/number_of_parents
 				break
 			minProb += fit
@@ -156,17 +146,19 @@ def Global_Selection(individuals, number_of_parents):
 ### Function that: Select parents locally
 #	Input:         list of the individs that may become parents, number of parents to make
 #   Outout:        Parents
-def Tournament_Selection(adults, N_parents, eps, N):
+def Tournament_Selection(scaling, adults, N_parents, eps, N):
+	# --- Scaling
+	#scaling(adults)
 
+	# --- Normalising
+	#normalise_fitness(adults)
 	# --- The list containing the chosen parents.
 	parents = []
 
 	# --- Runs while not all parents have been chosen.
 	while (len(parents) < N_parents):
-
 		# --- Pick N random adults and put them in the "pool".
 		pool = make_pool(adults, N)
-
 		# --- Sort the pool of individuals.
 		pool = sorted(pool, key=lambda individual: individual.fitness)
 
@@ -181,15 +173,14 @@ def Tournament_Selection(adults, N_parents, eps, N):
 			if rnd < (1-eps)*eps**(i-1):
 				parents.append(pool[N-i])
 				break
-
 	return parents
 
 def make_pool(adults, N):
 	pool = []
+	i = copy.deepcopy(adults)
 	while len(pool) < N:
-		chosen = adults[rng.randint(0, len(adults)-1)]
-		if chosen not in pool:
-			pool.append(chosen)
+		chosen = i.pop(rng.randint(0, len(i)-1))
+		pool.append(chosen)
 	return pool
 #
 if __name__ == '__main__':

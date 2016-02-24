@@ -38,8 +38,8 @@ class individual:
 			if rng.random() < self.mutation_prob:
 				if self.genotype[i] == 1: self.genotype[i] = 0
 				else: self.genotype[i] = 1
-				self.update_fitness()
 				is_mutated = True
+		if is_mutated: self.update_fitness()
 		return is_mutated
 	#
 	''' --- START Fitness functions --- '''

@@ -52,6 +52,7 @@ class individual:
 		else:
 			self.local_fitness()
 	def global_fitness(self):
+		#print("GLOBAL")
 		all_sets = []
 		E=0
 		for i in range(0, len(self.genotype)-1):
@@ -87,7 +88,7 @@ class individual:
 		#print("E:",E," -- 1 delt paa 1 +",E," er:",(1/(1+float(E))))
 		self.fitness=1/(1+E)
 if __name__ == '__main__':
-	i = individual(6, 3, 0.001, True)
+	i = individual(6, 3, 0.001, True, [1, 3, 4, 2, 1, 3, 3, 0, 2, 0, 0, 2, 1, 4, 1, 4, 3, 0, 2, 4])
 	print(i.genotype)
 	#print(i.phenotype)
 	print(i.fitness)

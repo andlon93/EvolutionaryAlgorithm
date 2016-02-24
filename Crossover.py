@@ -57,12 +57,9 @@ def N_Point_Crossover(Choose_problem, parents, Nsplits):
 		genome1 = genome1 + parents[i%2].genotype[splits[i]:splits[i+1]]
 		genome2 = genome2 + parents[i%2-1].genotype[splits[i]:splits[i+1]]
 	if Choose_problem==0:
-		#print("IN HERE")
 		child1 = OM.individual(Ngenes, mutation_prob, parents[0].goal_string, genome1)
 		child2 = OM.individual(Ngenes, mutation_prob, parents[0].goal_string, genome2)
 	elif Choose_problem==1:
-		#print("IN HERE")
-		#print("Genomes: ",genome1, genome2)
 		child1 = LOLZ.individual(Ngenes, parents[0].z, mutation_prob, genome1)
 		child2 = LOLZ.individual(Ngenes, parents[0].z, mutation_prob, genome2)
 	elif Choose_problem==2:
@@ -73,44 +70,39 @@ def N_Point_Crossover(Choose_problem, parents, Nsplits):
 		s=parents[0].s
 		child1 = SS.individual(Ngenes, s, mutation_prob, True, genome1)
 		child2 = SS.individual(Ngenes, s, mutation_prob, True, genome2)
-	#print("children crossover",child1, child2)
+
 	# Returning the new genotypes combined from the two parents
 	return child1, child2
 
-def make_children(Choose_problem, adults, children_size, Nsplits, p):
+def make_children(Choose_problem, adults, children_size, Nsplits, p, p_selection, scaling):
 	children = []
 	# --- Select two random parents and make a child until 
 	#     number of children equals children_size.
 	while (len(children) < children_size):
-
+		#print(len(children))
 		#p = 1.0
 		#Nsplits = 5
 
 		# --- Find parents.
-		#parents = PS.Global_Selection(adults, 2)
-		#print("parents: ",parents)
-		#print("adult length", len(adults))
-		#print("parents S: ", parents[0].s, parents[1].s)
-		parents = PS.Tournament_Selection(adults, 2, 0.05, 64)
+		parents = p_selection(scaling, adults, 2, 0.05, 24)
+		#if p_selection==0: parents = PS.Global_Selection(scaling, adults, 2)
+		#else: parents = PS.Tournament_Selection()
+
 		# --- Make children.
 		if (rng.random() < p):
-			#print("Croosover")
 			child1, child2 = N_Point_Crossover(Choose_problem, parents, Nsplits)
 		else:
-			#print("Copy")
-			#print("Parents: ", parents)
-			#print("COPYING")
 			child1 = parents[0]
 			child2 = parents[1]
 
 		# --- Possible mutation.
 		child1.try_to_mutate()
 		child2.try_to_mutate()
-
 		# --- Append children to list of children.
 		children.append(child1)
 		if len(children) < children_size:
 			children.append(child2)
+
 	#print("children: ",children)
 	return children
 

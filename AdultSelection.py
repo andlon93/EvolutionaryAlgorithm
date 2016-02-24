@@ -5,7 +5,7 @@ import copy
 #     and all children gain free entrance to the adult pool.
 #     Input:         list of children
 #     Output:        list of new adults
-def Full_Generational_Replacement(children, N):
+def Full_Generational_Replacement(children, parents, N):
 
 	# --- Returns all children if #children = #population.
 	if(len(children) == N):
@@ -22,7 +22,7 @@ def Full_Generational_Replacement(children, N):
 #     m adult spots, so selection pressure is signiﬁcant. 
 #     Input:         list of children
 #     Output:        list of new adults
-def Over_Production(children, N):
+def Over_Production(children, parents, N):
 
 	# --- Selects the N individuals with the best fitness.
 	return sorted(children, key=lambda individual: individual.fitness)[len(children)-N:]
@@ -37,7 +37,6 @@ def Over_Production(children, N):
 #     Input:         list of children and parents
 #     Output:        list of new adults
 def Generational_Mixing(children, adults, N):
-
 	# --- Selects the N individuals with the best fitness.
 	return sorted(children + adults, key=lambda individual: individual.fitness)[len(children + adults)-N:]
 

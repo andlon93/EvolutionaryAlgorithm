@@ -6,6 +6,7 @@ class individual:
 	mutation_prob = 0
 	genotype = []
 	fitness = 0
+	normalised_fitness = 0
 	### Constructor
 	def __init__(self, n, mutation_prob):
 		self.mutation_prob = mutation_prob
@@ -52,8 +53,8 @@ class individual:
 					self.genotype[i] = 0
 				else: 
 					self.genotype[i] = 1
-				self.update_fitness()
 				is_mutated = True
+		if is_mutated: self.update_fitness()
 		return is_mutated
 
 		#print(self.genotype)
