@@ -107,14 +107,14 @@ def EA_Loop(scaling, p_selection, adult_alg, Choose_problem, z, s, pop_size, gen
 	else: return Ngenerations, False, plotting, plotting2
 	#return Ngenerations
 #
-def main():
-	Choose_problem = 3 # 0==OneMax, 1==LOLZ, 2==LocalSS, 3==GlobalSS
-	adult_alg = 0 # 0==full repl., 1==over prod., 2==Gen. mixing 
-	parent_alg = 0 # 0==Global, 1==tournament
-	scaling = 3 # 0==fitness_prop, 1==sigma, 2==boltzmann, 3==rank
+def main(Choose_problem, bit_length, z, s, pop_size, Crossover_rate, mutation_rate, adult_alg, parent_alg, scaling):
+	#Choose_problem = 3 # 0==OneMax, 1==LOLZ, 2==LocalSS, 3==GlobalSS
+	#adult_alg = 0 # 0==full repl., 1==over prod., 2==Gen. mixing 
+	#parent_alg = 0 # 0==Global, 1==tournament
+	#scaling = 3 # 0==fitness_prop, 1==sigma, 2==boltzmann, 3==rank
 	#
-	z = 21
-	s = 15
+	#z = 21
+	#s = 15
 	#
 	N = 1
 	sum_generations = 0
@@ -122,11 +122,11 @@ def main():
 	Nfails = 0
 	#
 	gen_limit = 100000
-	pop_size = 230
+	#pop_size = 230
 	NSplits = 5
-	Crossover_rate = 0.8
-	mutation_rate = 0.0001
-	bit_length = 37
+	#Crossover_rate = 0.8
+	#mutation_rate = 0.0001
+	#bit_length = 37
 	#
 	#
 	#plotting=[[]]*100
@@ -189,30 +189,43 @@ def main():
 	plt.show()'''
 #
 def run():
-	not_done=1
-	while not_done==1:
+	not_done="1"
+	while not_done=="1":
+		z=0
+		s=0
 		print("Choose problem: 0=One Max, 1=LOLZ, 2=localSS, 3=globalSS")
 		problem=input("input int: ")
+		if problem=="0":
+			bit_size = input("input bit length: ")
+		if problem=="1":
+			bit_size = input("input bit length: ")
+			z=input("Z: ")
+		elif problem == "2" or problem == "3":
+			s=input("S: ")
+			bit_size=input("L: ")
+		pop_size=input("Population Size: ")
+		Crossover_rate=input("Crossover rate: ")
+		mutation_rate=input("Mutation rate: ")
 		#
 		print("Choose adult alg: 0=full repl., 1=over prod., 2=gen. mixing")
 		adult_alg=input("input int: ")
 		#
 		print("parent selection: 0=tournament, 1=fitness prop., 2=sigma, 3=rank")
 		p_select=input("input int: ")
-		if p_select==0:
+		if p_select=="0":
 			parent_alg=1
 			scaling=0
-		elif p_select==1:
+		elif p_select=="1":
 			parent_alg=0
 			scaling=0
-		elif p_select==2:
-			adult_alg=0
+		elif p_select=="2":
+			parent_alg=0
 			scaling=1
 		else:
-			adult_alg=0
+			parent_alg=0
 			scaling=3
 		
-
+		main(int(problem), int(bit_size), int(z), int(s), int(pop_size), float(Crossover_rate), float(mutation_rate), int(adult_alg), int(parent_alg), int(scaling))
 
 		not_done=input("Do you wish to continue(1/0)? ")
 		#
@@ -221,8 +234,9 @@ if __name__ == '__main__':
 	#Crossover_rate = 0.8
 	#mutation_rate = 0.0001
 	#print("\n--- Tournament: eps:0.05 k=64")
-	s=main()
-	print("Global.\nS:15 bit:37")
+	#s=main()
+	#print("Global.\nS:15 bit:37")
+	run()
 	'''j=1
 	temp=[]
 	for mnb in range(j):
